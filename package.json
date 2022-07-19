@@ -1,0 +1,15 @@
+{
+  "name": "discord-bot-zla",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Davit Karapetyan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "discord.js": "^13.8.1"
+  }
+}
