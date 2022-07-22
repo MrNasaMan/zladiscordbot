@@ -8,7 +8,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GFxloz.vj_o3BTZZkwOkJ6h3PkjlgGQTaXQ1SJn0EkDtM';
+const token = 'dm mr nasa man for token';
 
 
 client.once('ready', () => {
@@ -71,7 +71,7 @@ client.on('message', async message =>{
 });
 
 
-client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GFxloz.vj_o3BTZZkwOkJ6h3PkjlgGQTaXQ1SJn0EkDtM');
+client.login('dm mr nasa man for key');
 
 
 
