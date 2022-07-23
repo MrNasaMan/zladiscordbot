@@ -14,7 +14,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GKF61l.BDF6E0V8MuV17VFOUiO3J44v74Vq61WjBRcJY0';
+const token = 'dm mr nasa man for token';
 
 
 client.once('ready', () => {
@@ -161,7 +161,7 @@ if (command == 'help'){
 });
 
 
-client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GKF61l.BDF6E0V8MuV17VFOUiO3J44v74Vq61WjBRcJY0');
+client.login('dm mr nasa man for token');
 
 
 
