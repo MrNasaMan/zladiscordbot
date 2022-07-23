@@ -41,7 +41,7 @@ client.on('message', async message =>{
   const tecFirst = command.slice(0,3);
   const tecSecond = command.slice(3, 6);
   const tecThird = command.slice(6, 9);
-  const onlineFirst = command.slice(0, 6);
+ 
   
  
 
