@@ -1,12 +1,10 @@
-
-
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
+const url = 'https://laartcc.org/topten';
 const Discord = require('discord.js');
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-
-
-
-
+var toptenText = [];
 
 
 
@@ -14,7 +12,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'dm mr nasa man for token';
+const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GWIbiY.2ikFwhiIs03KEJEXs0bn8EtwnU94zL_u1hedfw';
 
 
 client.once('ready', () => {
@@ -41,14 +39,15 @@ client.on('message', async message =>{
   const tecFirst = command.slice(0,3);
   const tecSecond = command.slice(3, 6);
   const tecThird = command.slice(6, 9);
- 
-  
+  const statsSecond = command.slice(5, 13);
+  const statsfirst = command.slice(0, 5);
+  const topten = command.slice(0, 8);
  
 
   if (secondPart === 'apd'){
     const secondEmbed = new MessageEmbed()
 	  .setColor('#0099ff')
-	  .setTitle('**K**'+ firstPart.toUpperCase() + ' **Airport Diagram**')
+	  .setTitle('K'+ firstPart.toUpperCase() + ' Airport Diagram')
     .setURL('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/pdf')
     .setDescription('K' + firstPart.toUpperCase() + ' Airport Diagram Can Be Found Here')
     .setImage('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/png')
@@ -145,7 +144,7 @@ if (command == 'cmds'){
   const cmdsEmbed = new MessageEmbed()
 	  .setColor('FCFF33')
 	  .setTitle('**Commands Available For Use**')
-    .setDescription('**-icaometar** Shows the Metar for the Aiport(Some Aiports are not Covered)\n**-icaoinfo** Shows the Information for the Aiport \n**-icaoapd** Shows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** Shows a Random Aiport Where You Can Fly To \n**-faafaatec** Shows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec' )
+    .setDescription('**-icaometar** Shows the Metar for the Aiport(Some Aiports are not Covered)\n**-icaoinfo** Shows the Information for the Aiport \n**-icaoapd** Shows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** Shows a Random Aiport Where You Can Fly To \n**-faafaatec** Shows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n**-stats[id]** Shows the statistics for the specific id \n**-tophours** Shows the current Controllers With the Most Hours ' )
 	  message.channel.send({ embeds: [cmdsEmbed] });
   
 }
@@ -157,11 +156,147 @@ if (command == 'help'){
 	  message.author.send({ embeds: [helpEmbed] });
   
 }
+if (statsfirst === 'stats'){
+  let getStats= async () => {
+    let response = await axios.get('https://api.vatsim.net/api/ratings/'+ statsSecond + '/');
+    let stat = response.data;
+    return stat;
+}
+  let getStats2= async () => {
+    let response = await axios.get('https://api.vatsim.net/api/ratings/' + statsSecond + '/rating_times/');
+    let stat2 = response.data;
+    return stat2;
+}
 
+  let StatsValue = await getStats();
+  let Stats2Value = await getStats2();
+  const Stats2Embed = new MessageEmbed()
+  .setColor('#33E6FF')
+  .setTitle(`Stats for User ID: ${StatsValue.id}`)
+  .setDescription(`**Region:** ${StatsValue.region} \n**Division:** ${StatsValue.division}\n **Controller Rating:** ${StatsValue.rating} \n**Pilot Rating:** ${StatsValue.pilotrating} \n --------**Overall Times**-------- \n**Overall ATC** ${Stats2Value.atc} \n**S1:** ${Stats2Value.s1} \n**S2:** ${Stats2Value.s2} \n**S3:** ${Stats2Value.s3} \n**C1** ${Stats2Value.c1} \n**C3** ${Stats2Value.c3} \n**I1:** ${Stats2Value.i1}  \n**Overall Pilot** ${Stats2Value.pilot} \n----------------------------- \n **Register Date:** ${StatsValue.reg_date} \n**Last Rating Change:** ${StatsValue.lastratingchange} `)
+  message.channel.send({ embeds: [Stats2Embed] });
+
+}
+
+if (topten == 'tophours'){
+  puppeteer
+  .launch()
+  .then(browser => browser.newPage())
+  .then(page => {
+    return page.goto(url).then(function() {
+      return page.content();
+    });
+  })
+  .then(html => {
+    const $ = cheerio.load(html);
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(1) > a').each(function() {
+      toptenText.push({
+        Localfirst: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(1) > span.float-right').each(function() {
+      toptenText.push({
+        LocalTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(2) > a').each(function() {
+      toptenText.push({
+        Localsecond: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(2) > span.float-right').each(function() {
+      toptenText.push({
+        LocalSecondTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(3) > a').each(function() {
+      toptenText.push({
+        Localthird: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-danger > ul > li:nth-child(3) > span.float-right').each(function() {
+      toptenText.push({
+        LocalThirdTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(1) > a').each(function() {
+      toptenText.push({
+        Traconfirst: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(1) > span.float-right').each(function() {
+      toptenText.push({
+        TraconTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(2) > a').each(function() {
+      toptenText.push({
+        Traconsecond: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(2) > span.float-right').each(function() {
+      toptenText.push({
+        TraconsecondTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(3) > a').each(function() {
+      toptenText.push({
+        Traconthird: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-success > ul > li:nth-child(3) > span.float-right').each(function() {
+      toptenText.push({
+        TraconThirdTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(1) > a').each(function() {
+      toptenText.push({
+        Enroutefirst: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(1) > span.float-right').each(function() {
+      toptenText.push({
+        EnrouteTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(2) > a').each(function() {
+      toptenText.push({
+        Enroutesecond: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(2) > span.float-right').each(function() {
+      toptenText.push({
+        EnrouteSecondTime: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(3) > a').each(function() {
+      toptenText.push({
+        Enroutethird: $(this).text(),
+      });
+    });
+    $('body > div.container.pt-2 > div:nth-child(2) > div.col-md-9 > div:nth-child(3) > div.card.border-primary > ul > li:nth-child(3) > span.float-right').each(function() {
+      toptenText.push({
+        EnrouteThirdTime: $(this).text(),
+      });
+    });
+    const toptenEmbed = new MessageEmbed()
+	  .setColor('#11A655')
+	  .setTitle('**Controllers With the Most Hours Currently**')
+    .setDescription(`**--------Local--------**\n**1st:** ${toptenText[0].Localfirst} ${toptenText[1].LocalTime} \n**2nd:** ${toptenText[2].Localsecond} ${toptenText[3].LocalSecondTime} \n**3rd:** ${toptenText[4].Localthird} ${toptenText[5].LocalThirdTime}  \n**--------Tracon-------**\n**1st:** ${toptenText[6].Traconfirst} ${toptenText[7].TraconTime} \n**2nd:** ${toptenText[8].Traconsecond} ${toptenText[9].TraconsecondTime} \n**3rd:** ${toptenText[10].Traconthird} ${toptenText[11].TraconThirdTime} \n**--------Enroute------**\n**1st:** ${toptenText[12].Enroutefirst} ${toptenText[13].EnrouteTime} \n**2nd:** ${toptenText[14].Enroutesecond} ${toptenText[15].EnrouteSecondTime} \n**3rd:** ${toptenText[16].Enroutethird} ${toptenText[17].EnrouteThirdTime} `)
+	  message.channel.send({ embeds: [toptenEmbed] });
+  })
+  .catch(console.error);
+
+  
+  
+    
+  
+  
+}
 });
 
 
-client.login('dm mr nasa man for token');
+client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GWIbiY.2ikFwhiIs03KEJEXs0bn8EtwnU94zL_u1hedfw');
 
 
 
