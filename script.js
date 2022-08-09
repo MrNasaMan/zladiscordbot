@@ -12,7 +12,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GWIbiY.2ikFwhiIs03KEJEXs0bn8EtwnU94zL_u1hedfw';
+const token = 'bot token';
 
 
 client.once('ready', () => {
@@ -296,7 +296,7 @@ if (topten == 'tophours'){
 });
 
 
-client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GWIbiY.2ikFwhiIs03KEJEXs0bn8EtwnU94zL_u1hedfw');
+client.login('bot token);
 
 
 
