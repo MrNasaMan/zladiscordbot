@@ -12,7 +12,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'bot token';
+const token = 'dm nasa man for bot token';
 
 
 client.once('ready', () => {
@@ -158,7 +158,7 @@ if (command == 'help'){
 }
 if (statsfirst === 'stats'){
   let getStats= async () => {
-    let response = await axios.get('https://api.vatsim.net/api/ratings/'+ statsSecond + '/');
+    let response = await axios.get('https://api.vatusa.net/v2/user/' + statsSecond);
     let stat = response.data;
     return stat;
 }
@@ -167,13 +167,13 @@ if (statsfirst === 'stats'){
     let stat2 = response.data;
     return stat2;
 }
-
-  let StatsValue = await getStats();
-  let Stats2Value = await getStats2();
+  let statValue = await getStats();
+  let stat2Value = await getStats2();
+  let somet = 'data';
   const Stats2Embed = new MessageEmbed()
   .setColor('#33E6FF')
-  .setTitle(`Stats for User ID: ${StatsValue.id}`)
-  .setDescription(`**Region:** ${StatsValue.region} \n**Division:** ${StatsValue.division}\n **Controller Rating:** ${StatsValue.rating} \n**Pilot Rating:** ${StatsValue.pilotrating} \n --------**Overall Times**-------- \n**Overall ATC** ${Stats2Value.atc} \n**S1:** ${Stats2Value.s1} \n**S2:** ${Stats2Value.s2} \n**S3:** ${Stats2Value.s3} \n**C1** ${Stats2Value.c1} \n**C3** ${Stats2Value.c3} \n**I1:** ${Stats2Value.i1}  \n**Overall Pilot** ${Stats2Value.pilot} \n----------------------------- \n **Register Date:** ${StatsValue.reg_date} \n**Last Rating Change:** ${StatsValue.lastratingchange} `)
+  .setTitle('Statistics for ' + statValue[somet].fname + ' ' + statValue[somet].lname)
+  .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**Mentor: ** ' + statValue[somet].isMentor + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
   message.channel.send({ embeds: [Stats2Embed] });
 
 }
@@ -296,7 +296,7 @@ if (topten == 'tophours'){
 });
 
 
-client.login('bot token);
+client.login('dm nasa man for bot token');
 
 
 
