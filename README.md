@@ -16,8 +16,9 @@ Also uses Discord Embeds so the embed function is required
 -------------------------------------------
 
 Updates will need to happen as node packages update too.
-Also discord.js uodates frequently so that would need to be updated also.
+Also discord.js updates frequently so that would need to be updated also.
 Should also be updated if and when Vatsim/ other aviation APIs update
+
 ----------------------------------------------------
 
 Some commands use multiple APis so it could possible strain the server, so make sure to have one with a lot of ram/storage.
