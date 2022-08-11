@@ -1,7 +1,7 @@
 # zladiscordbot
 Bot for ZLA Discord
 
-This Bot Includes Numerous APis that do have their limits, The only one with a limit has a 1,000 Requests per Day, so try not to request more than that LOL.
+This Bot Includes Numerous APis that do have their limits, The only one with a limit has a 2,000 Requests per Day, so try not to request more than that LOL.
 
 -----------------------------------------------
 
