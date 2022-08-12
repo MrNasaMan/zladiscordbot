@@ -5,7 +5,8 @@ const Discord = require('discord.js');
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
 var toptenText = [];
-
+var eventText = [];
+const url2 = 'https://laartcc.org';
 
 
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] }); 
@@ -42,6 +43,8 @@ client.on('message', async message =>{
   const statsSecond = command.slice(5, 13);
   const statsfirst = command.slice(0, 5);
   const topten = command.slice(0, 8);
+  const online1 = command.slice(0, 6);
+  const gndchart = command.slice(0, 8);
  
 
   if (secondPart === 'apd'){
@@ -143,8 +146,8 @@ if (tecThird === 'tec'){
 if (command == 'cmds'){
   const cmdsEmbed = new MessageEmbed()
 	  .setColor('FCFF33')
-	  .setTitle('**Commands Available For Use**')
-    .setDescription('**-icaometar** Shows the Metar for the Aiport(Some Aiports are not Covered)\n**-icaoinfo** Shows the Information for the Aiport \n**-icaoapd** Shows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** Shows a Random Aiport Where You Can Fly To \n**-faafaatec** Shows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n**-stats[id]** Shows the statistics for the specific id \n**-tophours** Shows the current Controllers With the Most Hours ' )
+	  .setTitle('**Commands Available For Use** \n**Prefix:[-]**')
+    .setDescription('**-icaometar** Shows the Metar for the Aiport(Some Aiports are not Covered)\n**-icaoinfo** Shows the Information for the Aiport \n**-icaoapd** Shows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** Shows a Random Aiport Where You Can Fly To \n**-faafaatec** Shows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n**-stats[id]** Shows the statistics for the specific id \n**-tophours** Shows the current Controllers With the Most Hours \n**-online** Shows the current online controllers \n**-gndchart** Gives a pdf of SAN,LAX, and LAS ground/terminal charts \n**-help** Whenever you need help' )
 	  message.channel.send({ embeds: [cmdsEmbed] });
   
 }
@@ -293,17 +296,55 @@ if (topten == 'tophours'){
   
   
 }
+if (online1 == 'online'){
+  puppeteer
+  .launch()
+  .then(browser => browser.newPage())
+  .then(page => {
+    return page.goto(url2).then(function() {
+      return page.content();
+    });
+  })
+  .then(html => {
+    const $ = cheerio.load(html);
+    $('#onlinedata > div:nth-child(2)').each(function() {
+      eventText.push({
+        eventLink: $(this).text(),
+      });
+    });
+    
+  
+    const eventsEmbed = new MessageEmbed()
+	  .setColor('#11A655')
+	  .setTitle('**Online Controllers**')
+    .setDescription(`${eventText[0].eventLink}`)
+	  message.channel.send({ embeds: [eventsEmbed] });
+  
+
+  });
+  
+
+  }
+  if (gndchart === 'gndchart'){
+    const laxEmbed = new MessageEmbed()
+	  .setColor('#0099ff')
+	  .setTitle('LAX Terminal/Ground Charts')
+    .setURL('https://drive.google.com/file/d/1kitThKjsu8dkAPiaoDejtAYBbpMVQzPg/view')
+	  message.channel.send({ embeds: [laxEmbed] });
+
+    const lasEmbed = new MessageEmbed()
+	  .setColor('#0099ff')
+	  .setTitle('LAS Terminal/Ground Charts')
+    .setURL('https://drive.google.com/file/d/1xHmTbNGUWGODjZod8n9RmUbphL1Dwx0g/view')
+	  message.channel.send({ embeds: [lasEmbed] });
+
+    const sanEmbed = new MessageEmbed()
+	  .setColor('#0099ff')
+	  .setTitle('SAN Terminal/Ground Charts')
+    .setURL('https://drive.google.com/file/d/191lXDFVkzODXp7RLitsgIicfMmD3pHzI/view')
+	  message.channel.send({ embeds: [sanEmbed] });
+  }
+
 });
 
-
 client.login('dm nasa man for bot token');
-
-
-
-
-
-
-
-
-
-
