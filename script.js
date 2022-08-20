@@ -325,6 +325,7 @@ if (online1 == 'online'){
   
 
   }
+/*
   if (gndchart === 'gndchart'){
     const laxEmbed = new MessageEmbed()
 	  .setColor('#0099ff')
@@ -344,6 +345,9 @@ if (online1 == 'online'){
     .setURL('https://drive.google.com/file/d/191lXDFVkzODXp7RLitsgIicfMmD3pHzI/view')
 	  message.channel.send({ embeds: [sanEmbed] });
   }
+  */
+	
+  //Remove Jepp chart references and replace with airnav, as they are copyrighted.
 
 });
 
