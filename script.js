@@ -4,16 +4,18 @@ const url = 'https://laartcc.org/topten';
 const Discord = require('discord.js');
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
+var ifrText = [];
 var toptenText = [];
 var eventText = [];
 const url2 = 'https://laartcc.org';
+
 
 
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] }); 
 
 const prefix = '-';
 
-const token = 'dm nasa man for bot token';
+const token = 'dm mr nasa man for token';
 
 
 client.once('ready', () => {
@@ -45,6 +47,9 @@ client.on('message', async message =>{
   const topten = command.slice(0, 8);
   const online1 = command.slice(0, 6);
   const gndchart = command.slice(0, 8);
+  const analyzer1 = command.slice(8, 16);
+  const analyzer2 = command.slice(0, 4);
+  const analyzer3 = command.slice(4, 8);
  
 
   if (secondPart === 'apd'){
@@ -56,8 +61,55 @@ client.on('message', async message =>{
     .setImage('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/png')
 	  message.channel.send({ embeds: [secondEmbed] });
   }
-  if (command == 'checkroute'){
-    message.reply('https://flightaware.com/statistics/ifr-route/')
+  if (analyzer1 === 'ifrroute'){
+    const url3 = 'https://flightaware.com/analysis/route.rvt?origin=' + analyzer2.toUpperCase() + '&destination=' + analyzer3.toUpperCase()
+    puppeteer
+    .launch()
+    .then(browser => browser.newPage())
+    .then(page => {
+    return page.goto(url3).then(function() {
+      return page.content();
+    });
+  })
+  .then(html => {
+    const $ = cheerio.load(html);
+    ifrText = []
+    $('#mainBody > div.pageContainer > table > tbody > tr:nth-child(4) > td > table > tbody > tr:nth-child(1) > td:nth-child(5) > a').each(function() {
+      ifrText.push(
+        $(this).text(),
+      );
+    });
+    $('#mainBody > div.pageContainer > table > tbody > tr:nth-child(4) > td > table > tbody > tr:nth-child(2) > td:nth-child(5) > a').each(function() {
+        ifrText.push(
+          $(this).text(),
+        );
+    });
+      
+    $('#mainBody > div.pageContainer > table > tbody > tr:nth-child(4) > td > table > tbody > tr:nth-child(3) > td:nth-child(5) > a').each(function() {
+        ifrText.push(
+          $(this).text(),
+        );
+    });
+    
+    var text2=[];
+      ifrText.forEach((item, index) => {
+        text2 += index + ": " + item + "\n"; 
+      });
+      const analyzerEmbed = new MessageEmbed()
+      .setColor('#1811A6')
+      .setTitle(analyzer2.toUpperCase() + ' to ' + analyzer3.toUpperCase() + ' IFR Routes in Terms of **Popularity**')
+      .setDescription(text2.toString())
+      if (text2[0] == '0') {
+        message.channel.send({ embeds: [analyzerEmbed] });
+      }else{
+        message.channel.send('No IFR Route Found')
+      }
+    
+  
+  
+  })
+  
+  
   }
   if (command == 'wheretofly'){
     const randomEmbed = new MessageEmbed()
@@ -182,6 +234,7 @@ if (statsfirst === 'stats'){
 }
 
 if (topten == 'tophours'){
+  toptenText = []
   puppeteer
   .launch()
   .then(browser => browser.newPage())
@@ -289,14 +342,9 @@ if (topten == 'tophours'){
 	  message.channel.send({ embeds: [toptenEmbed] });
   })
   .catch(console.error);
-
-  
-  
-    
-  
-  
 }
 if (online1 == 'online'){
+  eventText = []
   puppeteer
   .launch()
   .then(browser => browser.newPage())
@@ -347,4 +395,4 @@ if (online1 == 'online'){
 
 });
 
-client.login('dm nasa man for bot token');
+client.login('dm mr nasa man for token');
