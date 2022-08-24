@@ -199,7 +199,7 @@ if (command == 'cmds'){
   const cmdsEmbed = new MessageEmbed()
 	  .setColor('FCFF33')
 	  .setTitle('**Commands Available For Use** \n**Prefix: [-]**')
-    .setDescription('**-(icao)metar** Shows the Metar for the Aiport(Some Aiports are not Covered)\n**-(icao)info** Shows the Information for the Airport \n**-(icao)apd** Shows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** Shows a Random Aiport Where You Can Fly To \n**-(faa)(faa)tec** Shows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n**-stats[cid]** Shows the statistics for the specific cid \n**-tophours** Shows the current Controllers With the Most Hours \n**-online** Shows the current online controllers \n**-gndchart** Gives a pdf of SAN,LAX, and LAS ground/terminal charts \n**-help** Whenever you need help' )
+    .setDescription('**-(icao)metar** \nShows the Metar for the Aiport(Some Aiports are not Covered)\n**-(icao)info** \nShows the Information for the Airport \n**-(icao)apd** \nShows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** \nShows a Random Aiport Where You Can Fly To \n**-(faa)(faa)tec** \nShows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n **-(icao)(icao)ifrroute**\nShows the top ifr routes from one airport to another.\n**-stats[cid]** \nShows the statistics for the specific cid \n**-tophours** \nShows the current Controllers With the Most Hours \n**-online** \nShows the current online controllers \n**-gndchart** Gives a pdf of SAN,LAX, and LAS ground/terminal charts \n**-help** \nWhenever you need help' )
 	  message.channel.send({ embeds: [cmdsEmbed] });
   
 }
