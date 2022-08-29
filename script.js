@@ -50,7 +50,8 @@ client.on('message', async message =>{
   const analyzer1 = command.slice(8, 16);
   const analyzer2 = command.slice(0, 4);
   const analyzer3 = command.slice(4, 8);
- 
+  const atis = command.slice(0, 4);
+  const atis2 = command.slice(4, 9);
 
   if (secondPart === 'apd'){
     const secondEmbed = new MessageEmbed()
@@ -391,6 +392,27 @@ if (online1 == 'online'){
 	  .setTitle('SAN Terminal/Ground Charts')
     .setURL('https://drive.google.com/file/d/191lXDFVkzODXp7RLitsgIicfMmD3pHzI/view')
 	  message.channel.send({ embeds: [sanEmbed] });
+  }
+  if (atis2 === 'datis'){
+    let getAtis= async () => {
+        let response = await axios.get('https://datis.clowd.io/api/' + atis);
+        let atiss = response.data;
+        return atiss
+    
+    }
+    let atisValue = await getAtis ();
+    atisValue.map(getAtiss);
+
+
+  function getAtiss(item) {
+    return (item.datis).toString()
+  }
+    const atisEmbed = new MessageEmbed()
+	  .setColor('#33E6FF')
+	  .setTitle('D-ATIS for '+ atis.toUpperCase())
+	  .setDescription('' + atisValue.map(getAtiss))
+	  message.channel.send({ embeds: [atisEmbed] });
+
   }
 
 });
