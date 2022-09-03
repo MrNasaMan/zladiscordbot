@@ -46,7 +46,6 @@ client.on('message', async message =>{
   const statsfirst = command.slice(0, 5);
   const topten = command.slice(0, 8);
   const online1 = command.slice(0, 6);
-  const gndchart = command.slice(0, 8);
   const analyzer1 = command.slice(8, 16);
   const analyzer2 = command.slice(0, 4);
   const analyzer3 = command.slice(4, 8);
@@ -374,25 +373,7 @@ if (online1 == 'online'){
   
 
   }
-  if (gndchart === 'gndchart'){
-    const laxEmbed = new MessageEmbed()
-	  .setColor('#0099ff')
-	  .setTitle('LAX Terminal/Ground Charts')
-    .setURL('https://drive.google.com/file/d/1kitThKjsu8dkAPiaoDejtAYBbpMVQzPg/view')
-	  message.channel.send({ embeds: [laxEmbed] });
-
-    const lasEmbed = new MessageEmbed()
-	  .setColor('#0099ff')
-	  .setTitle('LAS Terminal/Ground Charts')
-    .setURL('https://drive.google.com/file/d/1xHmTbNGUWGODjZod8n9RmUbphL1Dwx0g/view')
-	  message.channel.send({ embeds: [lasEmbed] });
-
-    const sanEmbed = new MessageEmbed()
-	  .setColor('#0099ff')
-	  .setTitle('SAN Terminal/Ground Charts')
-    .setURL('https://drive.google.com/file/d/191lXDFVkzODXp7RLitsgIicfMmD3pHzI/view')
-	  message.channel.send({ embeds: [sanEmbed] });
-  }
+ 
   if (atis2 === 'datis'){
     let getAtis= async () => {
         let response = await axios.get('https://datis.clowd.io/api/' + atis);
