@@ -15,7 +15,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '-';
 
-const token = 'dm mr nasa man for token';
+const token = 'dm nasa man for token';
 
 
 client.once('ready', () => {
@@ -122,75 +122,89 @@ client.on('message', async message =>{
   }
     
   if (metarSecond === 'metar'){
-    let getMetarr = async () => {
-        let response = await axios.get('https://api.aviationapi.com/v1/weather/metar?apt=' + metarFirst);
+    async function getMetarr () {
+      try {
+        let response = await axios.get('https://api.aviationapi.com/v1/weather/metar?apt=' + metarFirst)
         let metarrr = response.data;
         return metarrr
-    
-    }
-
-    let getInfooo = async () => {
-      let response = await axios.get('https://www.airport-data.com/api/ap_info.json?icao='+ metarFirst);
-      let infooo = response.data;
-      return infooo;
-  }
-    let infoooValue = await getInfooo ();
+      
+      } catch (e) {
+        console.log(e.response)
+      }
+      }
+  
     let metar2Value = await getMetarr ()
     let name = metarFirst.toUpperCase()
+    if (typeof metar2Value == 'object') {
     const metar2Embed = new MessageEmbed()
-	  .setColor('#33E6FF')
-	  .setTitle(`**METAR for** ${infoooValue.name} , ${infoooValue.location}  `)
+    .setColor('#33E6FF')
+	  .setTitle('Metar for '+ name )
 	  .setDescription('**ICAO:** ' + metar2Value[name].station_id + '\n**Temperature:** ' +  metar2Value[name].temp + 'C°'+ '\n**DewPoint:** ' +  metar2Value[name].dewpoint + ' C°' + '\n**Wind Direction:** '+  metar2Value[name].wind + '\n**Wind Velocity:** ' + metar2Value[name].wind_vel + ' Kts'+  '\n**Visibility:** ' +  metar2Value[name].visibility +  ' Miles' +  '\n**Altimeter:** ' + metar2Value[name].alt_hg +  '\n**Flight Conditions:** ' + metar2Value[name].category + '\n**Raw Metar:** ' +  metar2Value[name].raw + '\n**Observed:** ' + metar2Value[name].time_of_obs  )
 	  message.channel.send({ embeds: [metar2Embed] });
+    }else{
+      message.channel.send('No Airport Found')
+    }
+    
+    
+   
 
   }
 
   if (infoSecond === 'info'){
-    let getInfo = async () => {
-        let response = await axios.get('https://www.airport-data.com/api/ap_info.json?icao='+ infoFirst);
+    async function getInfo () {
+      try {
+        let response = await axios.get('https://www.airport-data.com/api/ap_info.json?icao='+ infoFirst)
         let infoo = response.data;
         return infoo;
-    }
+      
+      } catch (e) {
+        console.log(e.response)
+      }
+      }
     
-    let getMetar = async () => {
-          let response = await axios.get('https://api.checkwx.com/metar/' + metarFirst + '?x-api-key=ac348a7ad28f466aafd44dc34f');
-          let metarr = response.data;
-          return metarr;
-  
-    }
     let infooValue = await getInfo ();
-    let metarValue = await getMetar ();
+    if (`${infooValue.location}` !== 'null') {
     const infoEmbed = new MessageEmbed()
 	  .setColor('#9FFF33')
 	  .setTitle(`**Information for** ${infooValue.name} `)
     .setURL('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/pdf')
-    .setDescription(`**ICAO**: ${infooValue.icao} \n**IATA**: ${infooValue.iata} \n**Name**: ${infooValue.name} \n**Location**: ${infooValue.location} \n**Country**: ${infooValue.country} \n**Metar**: ${metarValue.data}`)
+    .setDescription(`**ICAO**: ${infooValue.icao} \n**IATA**: ${infooValue.iata} \n**Name**: ${infooValue.name} \n**Location**: ${infooValue.location} \n**Country**: ${infooValue.country}`)
     .setImage('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/png')
     .setTimestamp()
 	  message.channel.send({ embeds: [infoEmbed] });
+  }else{
+    message.channel.send('No Airport Found')
+  }
   
 
 }
 
 if (tecThird === 'tec'){
-  let getTec = async () => {
-    let response = await axios.get('https://api.aviationapi.com/v1/preferred-routes/search?origin='+ tecFirst + '&dest=' + tecSecond);
-    let Tecc = response.data;
-   return Tecc;
-  }
+  async function getTec () {
+    try {
+      let response = await axios.get('https://api.aviationapi.com/v1/preferred-routes/search?origin='+ tecFirst + '&dest=' + tecSecond)
+      let Tecc = response.data;
+      return Tecc;
+    
+    } catch (e) {
+      console.log(e.response)
+    }
+    }
   let TeccValue = await getTec ();
   TeccValue.map(getTeccc);
 
-
-  function getTeccc(item) {
+function getTeccc(item) {
     return ('\n**Origin:** ' + item.origin + '\n** Destination:**  ' + item.destination + '\n** Route:**  ' + item.route + '\n**Altitude:**  ' + item.altitude + '\n**Flow:**  ' + item.flow + '\n**Ops:**  ' + item.area.slice(-6) + '\n').toString()
   }
-  
+  if (TeccValue[0]?.d_artcc === 'ZLA') {
   const tecEmbed = new MessageEmbed()
   .setColor('#5E33FF')
 	.setTitle(tecFirst.toUpperCase() + ' to ' + tecSecond.toUpperCase() + ' TEC Routes')
   .setDescription('' + TeccValue.map(getTeccc))
 	message.channel.send({ embeds: [tecEmbed] });
+}else{
+  message.channel.send('Airport Not Found In ZLA Airspace')
+}
   
   
 }
@@ -199,7 +213,7 @@ if (command == 'cmds'){
   const cmdsEmbed = new MessageEmbed()
 	  .setColor('FCFF33')
 	  .setTitle('**Commands Available For Use** \n**Prefix: [-]**')
-    .setDescription(' \n**-(icao)datis**\nShows the D-ATIS for the specified airport\n**-(icao)metar** \nShows the Metar for the Aiport(Some Aiports are not Covered)\n**-(icao)info** \nShows the Information for the Airport \n**-(icao)apd** \nShows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** \nShows a Random Aiport Where You Can Fly To \n**-(faa)(faa)tec** \nShows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n **-(icao)(icao)ifrroute**\nShows the top ifr routes from one airport to another.\n**-stats[cid]** \nShows the statistics for the specific cid \n**-tophours** \nShows the current Controllers With the Most Hours \n**-online** \nShows the current online controllers \n**-gndchart** Gives a pdf of SAN,LAX, and LAS ground/terminal charts \n**-help** \nWhenever you need help' )
+    .setDescription(' \n**-(icao)datis**\nShows the D-ATIS for the specified airport\n**-(icao)metar** \nShows the Metar for the Aiport(Some Aiports are not Covered)\n**-(icao)info** \nShows the Information for the Airport \n**-(icao)apd** \nShows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** \nShows a Random Aiport Where You Can Fly To \n**-(faa)(faa)tec** \nShows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n **-(icao)(icao)ifrroute**\nShows the top ifr routes from one airport to another.\n**-stats[cid]** \nShows the statistics for the specific cid \n**-tophours** \nShows the current Controllers With the Most Hours \n**-online** \nShows the current online controllers' )
 	  message.channel.send({ embeds: [cmdsEmbed] });
   
 }
@@ -375,27 +389,35 @@ if (online1 == 'online'){
   }
  
   if (atis2 === 'datis'){
-    let getAtis= async () => {
-        let response = await axios.get('https://datis.clowd.io/api/' + atis);
+    async function getAtis() {
+      try {
+        let response = await axios.get('https://datis.clowd.io/api/' + atis)
         let atiss = response.data;
         return atiss
-    
-    }
+      
+      } catch (e) {
+        console.log(e.response)
+      }
+      }
     let atisValue = await getAtis ();
-    atisValue.map(getAtiss);
-
-
-  function getAtiss(item) {
-    return (item.datis).toString()
-  }
+    // atisValue.map(getAtiss);
+    
+    // function getAtiss(item) {
+    //   return (item.datis).toString()
+    // }
+    
+  if ( atisValue[0]?.airport === atis.toUpperCase()) {
     const atisEmbed = new MessageEmbed()
 	  .setColor('#33E6FF')
 	  .setTitle('D-ATIS for '+ atis.toUpperCase())
-	  .setDescription('' + atisValue.map(getAtiss))
+	  .setDescription('' + atisValue.map((item)=> {return (item.datis).toString()}))
 	  message.channel.send({ embeds: [atisEmbed] });
+  }else{
+    message.channel.send('Airport Not Found')
+  }
 
   }
 
 });
 
-client.login('dm mr nasa man for token');
+client.login('dm nasa man for token');
