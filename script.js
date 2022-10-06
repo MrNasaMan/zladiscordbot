@@ -16,7 +16,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GYAlWT.xXPj-YmhICbuvgmjFCdhWg7qCUXvpDLxmLSja4';
+const token = 'put token here';
 
 
 client.once('ready', () => {
@@ -320,4 +320,4 @@ if (online1 == 'online'){
 
 });
 
-client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GYAlWT.xXPj-YmhICbuvgmjFCdhWg7qCUXvpDLxmLSja4');
+client.login('put here');
