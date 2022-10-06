@@ -11,11 +11,12 @@ const url2 = 'https://laartcc.org';
 
 
 
+
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] }); 
 
-const prefix = '-';
+const prefix = '!';
 
-const token = 'dm nasa man for token';
+const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.GYAlWT.xXPj-YmhICbuvgmjFCdhWg7qCUXvpDLxmLSja4';
 
 
 client.once('ready', () => {
@@ -33,12 +34,7 @@ client.on('message', async message =>{
   const args = message.content.slice(prefix.length).split(/ +/);
   const command = args.shift().toLowerCase();
 
-  const firstPart = command.slice(1, 4);
-  const secondPart = command.slice(4, 7);
-  const metarFirst = command.slice(0,4);
-  const metarSecond = command.slice(4, 9);
-  const infoFirst = command.slice(0,4);
-  const infoSecond = command.slice(4, 8);
+
   const tecFirst = command.slice(0,3);
   const tecSecond = command.slice(3, 6);
   const tecThird = command.slice(6, 9);
@@ -49,18 +45,8 @@ client.on('message', async message =>{
   const analyzer1 = command.slice(8, 16);
   const analyzer2 = command.slice(0, 4);
   const analyzer3 = command.slice(4, 8);
-  const atis = command.slice(0, 4);
-  const atis2 = command.slice(4, 9);
+ 
 
-  if (secondPart === 'apd'){
-    const secondEmbed = new MessageEmbed()
-	  .setColor('#0099ff')
-	  .setTitle('K'+ firstPart.toUpperCase() + ' Airport Diagram')
-    .setURL('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/pdf')
-    .setDescription('K' + firstPart.toUpperCase() + ' Airport Diagram Can Be Found Here')
-    .setImage('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/png')
-	  message.channel.send({ embeds: [secondEmbed] });
-  }
   if (analyzer1 === 'ifrroute'){
     const url3 = 'https://flightaware.com/analysis/route.rvt?origin=' + analyzer2.toUpperCase() + '&destination=' + analyzer3.toUpperCase()
     puppeteer
@@ -99,6 +85,7 @@ client.on('message', async message =>{
       .setColor('#1811A6')
       .setTitle(analyzer2.toUpperCase() + ' to ' + analyzer3.toUpperCase() + ' IFR Routes in Terms of **Popularity**')
       .setDescription(text2.toString())
+      .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM,VATUSA, and Flight Aware.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
       if (text2[0] == '0') {
         message.channel.send({ embeds: [analyzerEmbed] });
       }else{
@@ -108,8 +95,6 @@ client.on('message', async message =>{
   
   
   })
-  
-  
   }
   if (command == 'wheretofly'){
     const randomEmbed = new MessageEmbed()
@@ -117,67 +102,10 @@ client.on('message', async message =>{
 	  .setTitle('**Looking for Somewhere to Fly?**')
     .setURL('https://flightaware.com/live/airport/random')
     .setDescription('Click Here to View the Details and Diagram of the Random Aiport ↑')
-    .setTimestamp()
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [randomEmbed] });
   }
     
-  if (metarSecond === 'metar'){
-    async function getMetarr () {
-      try {
-        let response = await axios.get('https://api.aviationapi.com/v1/weather/metar?apt=' + metarFirst)
-        let metarrr = response.data;
-        return metarrr
-      
-      } catch (e) {
-        console.log(e.response)
-      }
-      }
-  
-    let metar2Value = await getMetarr ()
-    let name = metarFirst.toUpperCase()
-    if (typeof metar2Value == 'object') {
-    const metar2Embed = new MessageEmbed()
-    .setColor('#33E6FF')
-	  .setTitle('Metar for '+ name )
-	  .setDescription('**ICAO:** ' + metar2Value[name].station_id + '\n**Temperature:** ' +  metar2Value[name].temp + 'C°'+ '\n**DewPoint:** ' +  metar2Value[name].dewpoint + ' C°' + '\n**Wind Direction:** '+  metar2Value[name].wind + '\n**Wind Velocity:** ' + metar2Value[name].wind_vel + ' Kts'+  '\n**Visibility:** ' +  metar2Value[name].visibility +  ' Miles' +  '\n**Altimeter:** ' + metar2Value[name].alt_hg +  '\n**Flight Conditions:** ' + metar2Value[name].category + '\n**Raw Metar:** ' +  metar2Value[name].raw + '\n**Observed:** ' + metar2Value[name].time_of_obs  )
-	  message.channel.send({ embeds: [metar2Embed] });
-    }else{
-      message.channel.send('No Airport Found')
-    }
-    
-    
-   
-
-  }
-
-  if (infoSecond === 'info'){
-    async function getInfo () {
-      try {
-        let response = await axios.get('https://www.airport-data.com/api/ap_info.json?icao='+ infoFirst)
-        let infoo = response.data;
-        return infoo;
-      
-      } catch (e) {
-        console.log(e.response)
-      }
-      }
-    
-    let infooValue = await getInfo ();
-    if (`${infooValue.location}` !== 'null') {
-    const infoEmbed = new MessageEmbed()
-	  .setColor('#9FFF33')
-	  .setTitle(`**Information for** ${infooValue.name} `)
-    .setURL('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/pdf')
-    .setDescription(`**ICAO**: ${infooValue.icao} \n**IATA**: ${infooValue.iata} \n**Name**: ${infooValue.name} \n**Location**: ${infooValue.location} \n**Country**: ${infooValue.country}`)
-    .setImage('https://flightaware.com/resources/airport/' + firstPart.toUpperCase() + '/APD/AIRPORT+DIAGRAM/png')
-    .setTimestamp()
-	  message.channel.send({ embeds: [infoEmbed] });
-  }else{
-    message.channel.send('No Airport Found')
-  }
-  
-
-}
 
 if (tecThird === 'tec'){
   async function getTec () {
@@ -201,27 +129,20 @@ function getTeccc(item) {
   .setColor('#5E33FF')
 	.setTitle(tecFirst.toUpperCase() + ' to ' + tecSecond.toUpperCase() + ' TEC Routes')
   .setDescription('' + TeccValue.map(getTeccc))
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	message.channel.send({ embeds: [tecEmbed] });
 }else{
-  message.channel.send('Airport Not Found In ZLA Airspace')
+  message.channel.send('No TEC Route Found')
 }
   
-  
-}
-
-if (command == 'cmds'){
-  const cmdsEmbed = new MessageEmbed()
-	  .setColor('FCFF33')
-	  .setTitle('**Commands Available For Use** \n**Prefix: [-]**')
-    .setDescription(' \n**-(icao)datis**\nShows the D-ATIS for the specified airport\n**-(icao)metar** \nShows the Metar for the Aiport(Some Aiports are not Covered)\n**-(icao)info** \nShows the Information for the Airport \n**-(icao)apd** \nShows the Airport Diagram for the Specified Aiport(Only Works with Aiports under FAA Jurisdiction) \n**-wheretofly** \nShows a Random Aiport Where You Can Fly To \n**-(faa)(faa)tec** \nShows TEC routes between two airports in ZLA airspace.(Uses the FAA Codes) ex.-sanlaxtec\n **-(icao)(icao)ifrroute**\nShows the top ifr routes from one airport to another.\n**-stats[cid]** \nShows the statistics for the specific cid \n**-tophours** \nShows the current Controllers With the Most Hours \n**-online** \nShows the current online controllers' )
-	  message.channel.send({ embeds: [cmdsEmbed] });
   
 }
 if (command == 'help'){
   const helpEmbed = new MessageEmbed()
 	  .setColor('#FF333F')
-	  .setTitle('**Need Help?**')
-    .setDescription('If you would like to report a bug please **DM Mr. Nasa Man#7426** \nFor help about the ARTCC please **DM the DATM** \nFor any suggestions please **DM Mr. Nasa Man#7426** \nFor any other inquires talk to either the **ATM or DATM of ZLA** \nTo see all of the commands try -cmds' )
+	  .setTitle('**Need Help?** \nBot Prefix = "!"')
+    .setDescription('**For bug reports, suggestions, or feedback please fill out this Google form**\nhttps://forms.gle/SC2JaXmnxYM1DvEe9\n**To view all of the commands try !cmds**\n**For general inquires please contact ZLA staff members.**')
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.author.send({ embeds: [helpEmbed] });
   
 }
@@ -239,10 +160,16 @@ if (statsfirst === 'stats'){
   let statValue = await getStats();
   let stat2Value = await getStats2();
   let somet = 'data';
+  let somet2 = 'no';
+  if (statValue[somet].isMentor = 'false'){
+    somet2 = 'No'
+  }
+
   const Stats2Embed = new MessageEmbed()
-  .setColor('#33E6FF')
+  .setColor('#1AAD1A')
   .setTitle('Statistics for ' + statValue[somet].fname + ' ' + statValue[somet].lname)
-  .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**Mentor: ** ' + statValue[somet].isMentor + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
+  .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**Mentor: ** ' + somet2 + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
   message.channel.send({ embeds: [Stats2Embed] });
 
 }
@@ -353,6 +280,7 @@ if (topten == 'tophours'){
 	  .setColor('#11A655')
 	  .setTitle('**Controllers With the Most Hours Currently**')
     .setDescription(`**--------Local--------**\n**1st:** ${toptenText[0].Localfirst} ${toptenText[1].LocalTime} \n**2nd:** ${toptenText[2].Localsecond} ${toptenText[3].LocalSecondTime} \n**3rd:** ${toptenText[4].Localthird} ${toptenText[5].LocalThirdTime}  \n**--------Tracon-------**\n**1st:** ${toptenText[6].Traconfirst} ${toptenText[7].TraconTime} \n**2nd:** ${toptenText[8].Traconsecond} ${toptenText[9].TraconsecondTime} \n**3rd:** ${toptenText[10].Traconthird} ${toptenText[11].TraconThirdTime} \n**--------Enroute------**\n**1st:** ${toptenText[12].Enroutefirst} ${toptenText[13].EnrouteTime} \n**2nd:** ${toptenText[14].Enroutesecond} ${toptenText[15].EnrouteSecondTime} \n**3rd:** ${toptenText[16].Enroutethird} ${toptenText[17].EnrouteThirdTime} `)
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [toptenEmbed] });
   })
   .catch(console.error);
@@ -380,6 +308,7 @@ if (online1 == 'online'){
 	  .setColor('#11A655')
 	  .setTitle('**Online Controllers**')
     .setDescription(`${eventText[0].eventLink}`)
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [eventsEmbed] });
   
 
@@ -387,37 +316,8 @@ if (online1 == 'online'){
   
 
   }
- 
-  if (atis2 === 'datis'){
-    async function getAtis() {
-      try {
-        let response = await axios.get('https://datis.clowd.io/api/' + atis)
-        let atiss = response.data;
-        return atiss
-      
-      } catch (e) {
-        console.log(e.response)
-      }
-      }
-    let atisValue = await getAtis ();
-    // atisValue.map(getAtiss);
-    
-    // function getAtiss(item) {
-    //   return (item.datis).toString()
-    // }
-    
-  if ( atisValue[0]?.airport === atis.toUpperCase()) {
-    const atisEmbed = new MessageEmbed()
-	  .setColor('#33E6FF')
-	  .setTitle('D-ATIS for '+ atis.toUpperCase())
-	  .setDescription('' + atisValue.map((item)=> {return (item.datis).toString()}))
-	  message.channel.send({ embeds: [atisEmbed] });
-  }else{
-    message.channel.send('Airport Not Found')
-  }
-
-  }
+  
 
 });
 
-client.login('dm nasa man for token');
+client.login('OTk0NjYzNzA1ODM5MTQ5MDc2.GYAlWT.xXPj-YmhICbuvgmjFCdhWg7qCUXvpDLxmLSja4');
