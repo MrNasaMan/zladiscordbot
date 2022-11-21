@@ -16,7 +16,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'put token here';
+const token = 'put here';
 
 
 client.once('ready', () => {
@@ -320,4 +320,4 @@ if (online1 == 'online'){
 
 });
 
-client.login('put token here');
+client.login('put here');
