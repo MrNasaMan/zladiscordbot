@@ -16,7 +16,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'put here';
+const token = 'token here';
 
 
 client.once('ready', () => {
@@ -147,32 +147,40 @@ if (command == 'help'){
   
 }
 if (statsfirst === 'stats'){
-  let getStats= async () => {
-    let response = await axios.get('https://api.vatusa.net/v2/user/' + statsSecond);
-    let stat = response.data;
-    return stat;
-}
-  let getStats2= async () => {
+  async function getStats () {
+    try {
+      let response = await axios.get('https://api.vatusa.net/v2/user/' + statsSecond);
+      let stat = response.data;
+      return stat;
+    } catch (e) {
+      console.log(e.response)
+    }
+    }
+
+async function getStats2 () {
+try {
     let response = await axios.get('https://api.vatsim.net/api/ratings/' + statsSecond + '/rating_times/');
     let stat2 = response.data;
     return stat2;
+} catch (e) {
+  console.log(e.response)
+}
 }
   let statValue = await getStats();
   let stat2Value = await getStats2();
+  if (stat2Value.s1 == '0'){
+    message.channel.send("No User Found");
+}else{
   let somet = 'data';
-  let somet2 = 'no';
-  if (statValue[somet].isMentor = 'false'){
-    somet2 = 'No'
-  }
-
   const Stats2Embed = new MessageEmbed()
   .setColor('#1AAD1A')
   .setTitle('Statistics for ' + statValue[somet].fname + ' ' + statValue[somet].lname)
-  .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**Mentor: ** ' + somet2 + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
+  .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
   .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
   message.channel.send({ embeds: [Stats2Embed] });
-
 }
+}
+
 
 if (topten == 'tophours'){
   toptenText = []
@@ -320,4 +328,4 @@ if (online1 == 'online'){
 
 });
 
-client.login('put here');
+client.login('token here');
