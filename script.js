@@ -82,14 +82,19 @@ client.on('message', async message =>{
         text2 += index + ": " + item + "\n"; 
       });
       const analyzerEmbed = new MessageEmbed()
-      .setColor('#1811A6')
-      .setTitle(analyzer2.toUpperCase() + ' to ' + analyzer3.toUpperCase() + ' IFR Routes in Terms of **Popularity**')
+      .setColor('0x5f5e66')
+      .setTitle(analyzer2.toUpperCase() + ' to ' + analyzer3.toUpperCase() + ' IFR routes in terms of popularity')
       .setDescription(text2.toString())
-      .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM,VATUSA, and Flight Aware.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+      .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Routes provided by FlightAware', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
       if (text2[0] == '0') {
         message.channel.send({ embeds: [analyzerEmbed] });
       }else{
-        message.channel.send('No IFR Route Found')
+        const error4Embed = new MessageEmbed()
+        .setColor('0xff0000')
+        .setTitle('**Error!**')
+        .setDescription('No Route Found.')
+        .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+        message.channel.send({ embeds: [error4Embed] });
       }
     
   
@@ -98,11 +103,11 @@ client.on('message', async message =>{
   }
   if (command == 'wheretofly'){
     const randomEmbed = new MessageEmbed()
-	  .setColor('#33FFC1')
-	  .setTitle('**Looking for Somewhere to Fly?**')
+	  .setColor('0x5f5e66')
+	  .setTitle('**Looking Somewhere to Fly?**')
     .setURL('https://flightaware.com/live/airport/random')
-    .setDescription('Click Here to View the Details and Diagram of the Random Aiport ↑')
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    .setDescription('Click here to view the details and diagrams of the random airport ↑')
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [randomEmbed] });
   }
     
@@ -126,23 +131,28 @@ function getTeccc(item) {
   }
   if (TeccValue[0]?.d_artcc === 'ZLA') {
   const tecEmbed = new MessageEmbed()
-  .setColor('#5E33FF')
+  .setColor('0x5f5e66')
 	.setTitle(tecFirst.toUpperCase() + ' to ' + tecSecond.toUpperCase() + ' TEC Routes')
   .setDescription('' + TeccValue.map(getTeccc))
-  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Routes provided by AviationAPI', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	message.channel.send({ embeds: [tecEmbed] });
 }else{
-  message.channel.send('No TEC Route Found')
+  const error3Embed = new MessageEmbed()
+  .setColor('0xff0000')
+  .setTitle('**Error!**')
+  .setDescription('No TEC route found.')
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  message.channel.send({ embeds: [error3Embed] });
 }
   
   
 }
 if (command == 'help'){
   const helpEmbed = new MessageEmbed()
-	  .setColor('#FF333F')
+	  .setColor('0x5f5e66')
 	  .setTitle('**Need Help?** \nBot Prefix = "!"')
-    .setDescription('**For bug reports, suggestions, or feedback please fill out this Google form**\nhttps://forms.gle/SC2JaXmnxYM1DvEe9\n**To view all of the commands try !cmds**\n**For general inquires please contact ZLA staff members.**')
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    .setDescription('**For bug reports, suggestions, or feedback please fill out this Google Form.**\nhttps://forms.gle/SC2JaXmnxYM1DvEe9\n**To view all of the commands try !cmds**\n**For general inquires please contact ZLA staff members.**')
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Weather and airport information provided by AVWX. Digital ATIS provided by https://datis.clowd.io/. TEC routes provided by AviationAPI. IFR routes provided by FlightAware VATSIM stats provided by the VATSIM and VATUSA API.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.author.send({ embeds: [helpEmbed] });
   
 }
@@ -153,7 +163,7 @@ if (statsfirst === 'stats'){
       let stat = response.data;
       return stat;
     } catch (e) {
-      console.log(e.response)
+      console.log(e)
     }
     }
 
@@ -163,24 +173,28 @@ try {
     let stat2 = response.data;
     return stat2;
 } catch (e) {
-  console.log(e.response)
+  console.log(e)
 }
 }
   let statValue = await getStats();
   let stat2Value = await getStats2();
-  if (stat2Value.s1 == '0'){
-    message.channel.send("No User Found");
-}else{
   let somet = 'data';
+  if (typeof stat2Value === 'undefined'){
+    const error2Embed = new MessageEmbed()
+    .setColor('0xff0000')
+	  .setTitle('**Error!**')
+    .setDescription('No user found. Please use a valid CID. You can find yours at https://my.vatsim.net/profile')
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+	  message.channel.send({ embeds: [error2Embed] });
+  } else {
   const Stats2Embed = new MessageEmbed()
-  .setColor('#1AAD1A')
+  .setColor('0x5f5e66')
   .setTitle('Statistics for ' + statValue[somet].fname + ' ' + statValue[somet].lname)
   .setDescription('**Facility: ** '+  statValue[somet].facility + '\n**Rating: ** ' + statValue[somet].rating_short  + '\n**--------Overall Times--------**' + '\n**Overall ATC: **' +  stat2Value.atc + '\n**Overall Pilot: **' + stat2Value.pilot + '\n**S1: **' +  stat2Value.s1 + '\n**S2: **' +  stat2Value.s2 + '\n**S3: **' +  stat2Value.s3 + '\n**C1: **' +  stat2Value.c1 + '\n**C3: **' +  stat2Value.c3 + '\n**I1: **' +  stat2Value.i1 + '\n**---------------------------------**' + '\n**Joined: ** ' + statValue[somet].created_at  )
-  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. VATSIM stats provided by the VATUSA and VATSIM API.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
   message.channel.send({ embeds: [Stats2Embed] });
 }
 }
-
 
 if (topten == 'tophours'){
   toptenText = []
@@ -285,10 +299,10 @@ if (topten == 'tophours'){
       });
     });
     const toptenEmbed = new MessageEmbed()
-	  .setColor('#11A655')
+	  .setColor('0x5f5e66')
 	  .setTitle('**Controllers With the Most Hours Currently**')
     .setDescription(`**--------Local--------**\n**1st:** ${toptenText[0].Localfirst} ${toptenText[1].LocalTime} \n**2nd:** ${toptenText[2].Localsecond} ${toptenText[3].LocalSecondTime} \n**3rd:** ${toptenText[4].Localthird} ${toptenText[5].LocalThirdTime}  \n**--------Tracon-------**\n**1st:** ${toptenText[6].Traconfirst} ${toptenText[7].TraconTime} \n**2nd:** ${toptenText[8].Traconsecond} ${toptenText[9].TraconsecondTime} \n**3rd:** ${toptenText[10].Traconthird} ${toptenText[11].TraconThirdTime} \n**--------Enroute------**\n**1st:** ${toptenText[12].Enroutefirst} ${toptenText[13].EnrouteTime} \n**2nd:** ${toptenText[14].Enroutesecond} ${toptenText[15].EnrouteSecondTime} \n**3rd:** ${toptenText[16].Enroutethird} ${toptenText[17].EnrouteThirdTime} `)
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [toptenEmbed] });
   })
   .catch(console.error);
@@ -313,10 +327,10 @@ if (online1 == 'online'){
     
   
     const eventsEmbed = new MessageEmbed()
-	  .setColor('#11A655')
+	  .setColor('0x5f5e66')
 	  .setTitle('**Online Controllers**')
     .setDescription(`${eventText[0].eventLink}`)
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY. Information provided by VATSIM, VATUSA, and Flightaware. TEC routes provided by AviationAPI.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [eventsEmbed] });
   
 
