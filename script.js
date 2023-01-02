@@ -4,7 +4,6 @@ const url = 'https://laartcc.org/topten';
 const Discord = require('discord.js');
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-const terminalProcedures = require('terminal-procedures')
 var ifrText = [];
 var toptenText = [];
 var eventText = [];
