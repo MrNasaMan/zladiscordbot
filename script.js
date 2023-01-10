@@ -23,7 +23,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'token here';
+const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.Gs9_8Q.g64z6q8aRuRAERHGtoBArxZRorihJCxJBIajCU';
 
 
 
@@ -104,7 +104,7 @@ client.once('ready', () => {
     .setTitle('**Top Controllers of the Month**')
     .setDescription('Good afternoon aviatiors, every month we look at and find the controller with the most hours in three categories, local, tracon, and enroute.The winners for this month are the following:\n\n**Local:**\n'+'`'+`${dateText[0].LocalWinner}`+'`'+ ' with a time of ' +'`' +`${dateText[1].LocalTimer.slice(0,2)}`+' hours'+'`'+  ' and ' + '`'+`${dateText[1].LocalTimer.slice(3,5)}` + ' '+ timer1+'`'+ '\n**Tracon:**\n' + '`'+`${dateText[2].TraconWinner}`+'`'+ ' with a time of ' +'`' +`${dateText[3].TraconTimer.slice(0,2)}`+' hours'+'`' +' and ' + '`' +`${dateText[3].TraconTimer.slice(3,5)}` +' '+timer2+'`'+ '\n**Enroute:**\n' + '`'+`${dateText[4].EnrouteWinner}`+'`'+ ' with a time of ' +'`' +`${dateText[5].EnrouteTimer.slice(0,2)}`+' hours'+'`' +' and ' + '`' +`${dateText[5].EnrouteTimer.slice(3,5)}`+' '+timer3+'`'+ '\n\nCongratulations to all three controllers for winning this months top controllers list. Special thanks to all the controllers who provided ATC coverage this month in ZLA!')
     .setFooter({ text: 'Winners are announced on the 28th of each month. Bot coded by DY and BY ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-    client.channels.cache.get("998980240401502328").send({ embeds: [tophurEmbed] });
+    client.channels.cache.get("612409520387391621").send({ embeds: [tophurEmbed] });
     })
       
     }else{
@@ -455,7 +455,34 @@ if (topten == 'tophours'){
     })
   
   }
-
+  if (message.content === '!news') {
+    axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: 'aviation',
+        sortBy: 'publishedAt',
+        apiKey: '9d86b02306a649abaabc073c1bd43235'
+      }
+    })
+      .then(response => {
+        const article = response.data.articles[0];
+        const title = article.title;
+        const url = article.url;
+        const imagee = article.urlToImage
+        const descrept = article.description
+        const popEmbed = new MessageEmbed()
+        .setColor('0x5f5e66')
+        .setURL(url)
+        .setTitle(title)
+        .setDescription(descrept+ ' **Read more by clicking the link above ↑**')
+        .setImage(imagee)
+        .setFooter({ text: 'News by NewsAPI. Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+        message.channel.send({ embeds: [popEmbed] })
+      })
+      .catch(error => {
+        console.error(error);
+        message.channel.send('There was an error retrieving the news from the NewsAPI.');
+      });
+  }
   
    
    
