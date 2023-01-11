@@ -23,7 +23,7 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'OTk0NjYzNzA1ODM5MTQ5MDc2.Gs9_8Q.g64z6q8aRuRAERHGtoBArxZRorihJCxJBIajCU';
+const token = 'put token here';
 
 
 
@@ -113,7 +113,8 @@ client.once('ready', () => {
     
   })
     }, 86400000);
-  
+
+    
 });
 
 
@@ -126,24 +127,12 @@ client.on('message', async message =>{
   const command = args.shift().toLowerCase();
 
 
-  const tecFirst = command.slice(0,3);
-  const tecSecond = command.slice(3, 6);
-  const tecThird = command.slice(6, 9);
-  const topten = command.slice(0, 8);
-  const analyzer1 = command.slice(8, 16);
-  const analyzer2 = command.slice(0, 4);
-  const analyzer3 = command.slice(4, 8);
- 
-
-  
-
- 
-
-  
- 
-
-  if (analyzer1 === 'ifrroute'){
-    const url3 = 'https://flightaware.com/analysis/route.rvt?origin=' + analyzer2.toUpperCase() + '&destination=' + analyzer3.toUpperCase()
+  if (message.content.startsWith('!ifrroute')){
+    
+    const analyzer2 = message.content.split(' ')[1];
+    const analyzer3 = message.content.split(' ')[2];
+   
+  const url3 = 'https://flightaware.com/analysis/route.rvt?origin=' + analyzer2.toUpperCase() + '&destination=' + analyzer3.toUpperCase()
     
     puppeteer
     .launch()
@@ -208,7 +197,9 @@ client.on('message', async message =>{
   }
     
 
-if (tecThird === 'tec'){
+if (message.content.startsWith('!tec')){
+  const tecSecond = message.content.split(' ')[1];
+  const tecFirst = message.content.split(' ')[2];
   async function getTec () {
     try {
       let response = await axios.get('https://api.aviationapi.com/v1/preferred-routes/search?origin='+ tecFirst + '&dest=' + tecSecond)
@@ -221,7 +212,6 @@ if (tecThird === 'tec'){
     }
   let TeccValue = await getTec ();
   TeccValue.map(getTeccc);
-  console.log(TeccValue)
   function getTeccc(item) {
     return ('\n**Origin:** ' + item.origin + '\n** Destination:**  ' + item.destination + '\n** Route:**  ' + item.route + '\n**Altitude:**  ' + item.altitude + '\n**Flow:**  ' + item.flow + '\n**Ops:**  ' + item.area.slice(-6) + '\n').toString()
   }
@@ -295,7 +285,7 @@ try {
 }
 
 
-if (topten == 'tophours'){
+if (message.content.startsWith('!tophours')){
   toptenText = []
   puppeteer
   .launch()
@@ -455,37 +445,7 @@ if (topten == 'tophours'){
     })
   
   }
-  if (message.content === '!news') {
-    axios.get('https://newsapi.org/v2/everything', {
-      params: {
-        q: 'aviation',
-        sortBy: 'publishedAt',
-        apiKey: '9d86b02306a649abaabc073c1bd43235'
-      }
-    })
-      .then(response => {
-        const article = response.data.articles[0];
-        const title = article.title;
-        const url = article.url;
-        const imagee = article.urlToImage
-        const descrept = article.description
-        const popEmbed = new MessageEmbed()
-        .setColor('0x5f5e66')
-        .setURL(url)
-        .setTitle(title)
-        .setDescription(descrept+ ' **Read more by clicking the link above ↑**')
-        .setImage(imagee)
-        .setFooter({ text: 'News by NewsAPI. Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-        message.channel.send({ embeds: [popEmbed] })
-      })
-      .catch(error => {
-        console.error(error);
-        message.channel.send('There was an error retrieving the news from the NewsAPI.');
-      });
-  }
   
-   
-   
   
   
 
