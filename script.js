@@ -8,10 +8,14 @@ var ifrText = [];
 var toptenText = [];
 var eventText = [];
 const url2 = 'https://laartcc.org';
-const vatsim_stats = require('vatsim-stats');
 const dateText = []
-const {handler} = require('vatsim-data-handler');
-const request = require('request')
+const request = require('request');
+var flightGenerator = require('random-flight-generator');
+
+
+
+
+
 
 
 
@@ -23,13 +27,14 @@ const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 const prefix = '!';
 
-const token = 'put token here';
+const token = 'token here';
+
 
 
 
 
 client.once('ready', () => {
-  
+  console.log('Logged In')
 
   setInterval(function() {
     axios.get('https://www.timeapi.io/api/Time/current/zone?timeZone=US/Pacific')
@@ -119,14 +124,16 @@ client.once('ready', () => {
 
 
 
+
 client.on('message', async message =>{
 
   if(!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).split(/ +/);
   const command = args.shift().toLowerCase();
+ 
 
-
+  
   if (message.content.startsWith('!ifrroute')){
     
     const analyzer2 = message.content.split(' ')[1];
@@ -185,15 +192,6 @@ client.on('message', async message =>{
   
   
   })
-  }
-  if (command == 'wheretofly'){
-    const randomEmbed = new MessageEmbed()
-	  .setColor('0x5f5e66')
-	  .setTitle('**Looking Somewhere to Fly?**')
-    .setURL('https://flightaware.com/live/airport/random')
-    .setDescription('Click here to view the details and diagrams of the random airport ↑')
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-	  message.channel.send({ embeds: [randomEmbed] });
   }
     
 
@@ -396,58 +394,199 @@ if (message.content.startsWith('!tophours')){
   })
   .catch(console.error);
 }
+    // if (message.content.startsWith('!giveroles')){
+    //   const dude = message.member.nickname.split(' ',2)
+    //   const dude1 = dude[0];
+    //   const dude2 = dude[1];
 
-  if (message.content.startsWith('!traffic')){
-    const traffic2 =  message.content.split(' ')[1];
-    vatsim_stats.apt_data.getAllAiportData(traffic2).then((response) => {
-    var list = ['KLAS',"KLAX",'KLSV','KNKX','KSAN','KBUR','KPSP','KRIV','KSBA','KSNA','KBFL',	'KCMA','KCNO','KCRQ','KEDW','KEMT','KFUL','KGCN','KHHR',	'KHND','KIFP','KINS',	'KLGB',		'KLGF',	'KMHV',	'KMYF',	'KNFG',	'KNID',	'KNJK','KNRS','KNSI','KNTD'	,'KNUC',	'KNXP',	'KNYL',	'KNZY',	'KOXR',	'KPMD',	'KPOC','KRAL',	'KRNM',	'KSBD', 'KSBP',	'KSDM',	'KSEE',	'KSLI',	'KSMO',	'KSMX',		'KTOA','KVBG',	'KVCV', 'KVGT','KVNY','KWHP','KWJF',	'KBLH',	'KEED',	'KIPL',	'KLPC',		'KSGU',		'KTRM',	];
-    if(list.includes(traffic2.toUpperCase())){
-
-    const trafEmbed = new MessageEmbed()
-	  .setColor('0x5f5e66')
-	  .setTitle('**Departures, Arrivals, and Controllers at **'+ '`' +traffic2.toUpperCase()+'`')
-    .setDescription('**Departures: **' + '`' + response.departures+'`' + '\n**Arrivals: **' + '`'+response.arrivals+'`' + '\n**Controllers: **' + '`'+response.controllers+'`' )
-    .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-	  message.channel.send({ embeds: [trafEmbed] });
-    }else{
-      const error5Embed = new MessageEmbed()
-      .setColor('0xff0000')
-      .setTitle('**Error!**')
-      .setDescription('ICAO code is invalid or is outside the ZLA airspace. Please input one to meet the criteria.')
-      . setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-      message.channel.send({ embeds: [error5Embed] });
-    }
-  })
-      }
-
-    if (message.content.startsWith('!popular')){
+    //   axios.get('https://api.vatusa.net/v2/facility/zla/roster/both')
+    // .then(function (response) {
+    //   const dambul = response.data.data
+    //   const aper = Object.values(dambul).filter(x=> x.fname === dude1 && x.lname === dude2 );
+    //   console.log('working')
+    //   if (aper.length === 0 ){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "Guest");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //   }else if(aper[0].flag_homecontroller.toString() === 'true' ){
+    //     if (aper[0].facility === 'ZLA'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "Home Controller");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'OBS'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "OBS");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'S1'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "S1");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'S2'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "S2");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'S3'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "S3");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //    }if (aper[0].rating_short === 'C1'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "C1");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'C3'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "C3");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].rating_short === 'I1'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "C3");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }if (aper[0].membership === 'visit'){
+    //     let role =  message.guild.roles.cache.find(role => role.name === "Visiting Controller");
+    //     if (role) message.guild.members.cache.get(message.author.id).roles.add(role);
+    //     }
+    //   }
+      
+    //   const error5Embed = new MessageEmbed()
+    //   .setColor('0x5f5e66')
+    //   .setTitle('**Your roles have been assigned.**')
+    //   .setDescription('If you think the bot has assigned the wrong roles please check your nickname and make sure it is your FULL name that you used to register with VATSIM, Then resend the command.')
+    //   .setFooter({ text: 'Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    //   message.channel.send({ embeds: [error5Embed] });
+    // });
     
-    handler.getPopularAirports().then(val => {
-      handler.getCount('controllers').then(val1 => {
-        handler.getCount('pilots').then(val2 => {
-          handler.getCount('all').then(val3 => {
-            const popEmbed = new MessageEmbed()
-            .setColor('0x5f5e66')
-            .setTitle('Most Popular Airports on VATSIM')
-            .setDescription('**1: **' + '`'+ val[0].id +'`' + '\n> **Aircraft: **' + val[0].count+ '\n**2: **' + '``'+ val[1].id +'``'+ '\n> **Aircraft: **' + val[1].count+ '\n**3: **' + '`'+ val[2].id +'`'+ '\n> **Aircraft: **' + val[2].count+ '\n**4: **' + '`'+ val[3].id +'`'+  '\n> **Aircraft: **' + val[3].count+'\n**5: **' + '`'+ val[4].id +'`'+  '\n> **Aircraft: **' + val[4].count+'\n**6: **' + '`'+ val[5].id +'`'+ '\n> **Aircraft: **' + val[5].count+ '\n**7: **' + '`'+ val[6].id +'`'+  '\n> **Aircraft: **' + val[6].count+'\n**8: **' + '`'+ val[7].id +'`'+ '\n> **Aircraft: **' + val[7].count+ '\n**9: **' + '`'+ val[8].id +'`'+  '\n> **Aircraft: **' + val[8].count+'\n**10: **' + '`'+ val[9].id +'`'+ '\n> **Aircraft: **' + val[9].count)
-            .addFields(
-              { name: 'Controllers', value: ' ' + val1, inline: true },
-              { name: 'Pilots', value: ' ' + val2, inline: true },
-              { name: 'Total', value: ' ' + val3, inline: true },
-            )
-            .setFooter({ text: 'VATSIM data by hcphoon01. Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
-            message.channel.send({ embeds: [popEmbed] })
-          })
-        })
-      
-      })
-      
-    })
+    
+    // }
+    if (message.content.startsWith('!testing')) {
+      message.reply('Please enter the maximum distance from airport to airport, in natucal miles, of your flight');
+    
+    
+    const filter = (m) => m.author.id === message.author.id;
+    const collector =  client.channels.cache.get("998980240401502328").createMessageCollector({ filter, time: 5000 });
+
+  collector.on('collect', m => {
   
+
+   
+
+    var options = { minDistance: 10, maxDistance: debil, includeCountries: ['US'], majorAirportsOnly: true }
+    var flight = flightGenerator(options);
+
+    
+
+    console.log(flight)
+
+    
+
+    
+  });
+
+  collector.on('end', collected => {
+
+    if (`${collected.size}` === '0'){
+      const randEmbed = new MessageEmbed()
+      .setColor('0x5f5e66')
+      .setTitle('**ERROR!**')
+      .setDescription('**Timeout. To restart, resend the command**')
+      .setFooter({ text: 'NOTE: Command only works in the #pets-and-robots channel. Not for real world use! Bot coded by DY and BY', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+      message.channel.send({ embeds: [randEmbed] });
+    }
+  });
+  
+}
+if (message.content.startsWith('!wheretofly')) {
+  message.reply('Please enter the maximum distance for your flight in nautical miles.');
+
+
+const filter = (m) => m.author.id === message.author.id;
+const collector =  client.channels.cache.get("998980240401502328").createMessageCollector({ filter, time: 5000 });
+
+collector.on('collect', m => {
+const her = isNaN(`${m.content}`)
+var herr = parseInt(`${m.content}`)
+
+if (her === true){
+  const randEmbed = new MessageEmbed()
+  .setColor('0xff0000')
+  .setTitle('**Error!**')
+  .setDescription('Input is not a number or includes extra values.. Do not add (nm) to the end. [Example input: 1000] To restart, resend the command')
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  message.channel.send({ embeds: [randEmbed] });
+}else if(herr <= 10 ){
+  const rand2Embed = new MessageEmbed()
+  .setColor('0xff0000')
+  .setTitle('**Error!**')
+  .setDescription('Input is smaller than or equal to 10. Please input a number greater than 10. Do not add (nm) to the end. To restart, resend the command')
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  message.channel.send({ embeds: [rand2Embed] });
+}else{
+
+
+var debil = `${m.content}`;
+
+var options = { minDistance: 10, maxDistance: debil, includeCountries: ['US'], majorAirportsOnly: true }
+var flight = flightGenerator(options);
+
+
+
+
+
+const randEmbed = new MessageEmbed()
+.setColor('0x5f5e66')
+.setTitle('**Randomly Generated Flight Plan**')
+.setDescription('**DEPARTURE**' + '\n\**Airport Name: **' + '`' + flight.departure.name + '`' +  '\n**ICAO: **' + '`' +flight.departure.icao +'`' + '\n**State: **'  + '`' +flight.arrival.state + '`'+ '\n **City: **'  + '`' +flight.departure.city +'`' + '\n\n**ARRIVAL**' + '\n\**Airport Name: **' +'`' + flight.arrival.name +'`' +  '\n**ICAO: **' + '`' +flight.arrival.icao+ '`' + '\n**State: **'  + '`' +flight.arrival.state + '`'  + '\n**City: **'  + '`' +flight.arrival.city + '`' )
+.setFooter({ text: 'Random flight api by gabranches. Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+message.channel.send({ embeds: [randEmbed] });
+
+}
+});
+
+collector.on('end', collected => {
+
+if (`${collected.size}` === '0'){
+  const randEmbed = new MessageEmbed()
+  .setColor('0xff0000')
+  .setTitle('**Error!**')
+  .setDescription('Timed out. You must reply within 5 seconds for the bot to work.')
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  message.channel.send({ embeds: [randEmbed] });
+}
+});
+
+}
+if (message.content.startsWith('!traffic')){
+  
+
+  const trafvalue = message.content.split(' ')[1];
+  if (trafvalue === ''){
+    const error5Embed = new MessageEmbed()
+    .setColor('0xff0000')
+    .setTitle('**Error!**')
+    .setDescription('No value provided.')
+    . setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    message.channel.send({ embeds: [error5Embed] });
   }
+
+ 
+  axios.get('https://api.vatusa.net/v2/public/planes')
+  .then(function (response) {
+    
+  const hophop = trafvalue.toUpperCase()
+  const dambul5 = response.data.data
+  const huud = Object.values(dambul5).filter(x=> x.dep === hophop );
+  const huud2 = Object.values(dambul5).filter(n=> n.arr === hophop );
+ 
+  if ( huud.length === 0){
+    const error5Embed = new MessageEmbed()
+    .setColor('0xff0000')
+    .setTitle('**Error!**')
+    .setDescription('ICAO code is invalid or one is not provided. Please input one to meet the criteria.')
+    . setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+    message.channel.send({ embeds: [error5Embed] });
+  }else{
+    const trafEmbed = new MessageEmbed()
+  .setColor('0x5f5e66')
+  .setTitle('**Departures and Arrivals at **'+ '`' +hophop+'`')
+  .setDescription('**Departures: **' + '`' + huud.length+'`' + '\n**Arrivals: **' + '`'+huud2.length+'`')
+  .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+  message.channel.send({ embeds: [trafEmbed] });
+  }
+});
   
   
-  
+
+    }
 
 });
 
