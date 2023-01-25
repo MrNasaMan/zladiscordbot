@@ -549,14 +549,15 @@ if (message.content.startsWith('!traffic')){
   
 
   const trafvalue = message.content.split(' ')[1];
-  if (trafvalue === ''){
+  
+  if (trafvalue === undefined){
     const error5Embed = new MessageEmbed()
     .setColor('0xff0000')
     .setTitle('**Error!**')
     .setDescription('No value provided.')
     . setFooter({ text: 'Not for real world use! Bot coded by DY and BY. ', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
     message.channel.send({ embeds: [error5Embed] });
-  }
+  }else{
 
  
   axios.get('https://api.vatusa.net/v2/public/planes')
@@ -584,7 +585,7 @@ if (message.content.startsWith('!traffic')){
   }
 });
   
-  
+}
 
     }
 
