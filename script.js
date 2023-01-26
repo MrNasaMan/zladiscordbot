@@ -400,7 +400,7 @@ if (message.content.startsWith('!wheretofly')) {
 
 
 const filter = (m) => m.author.id === message.author.id;
-const collector =  client.channels.cache.get("998980240401502328").createMessageCollector({ filter, time: 5000 });
+const collector =  client.channels.cache.get("612510959931752467").createMessageCollector({ filter, time: 5000 });
 
 collector.on('collect', m => {
 const her = isNaN(`${m.content}`)
