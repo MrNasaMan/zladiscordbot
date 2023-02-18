@@ -23,11 +23,13 @@ var flightGenerator = require('random-flight-generator');
 
 
 
+
+
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] }); 
 
 const prefix = '!';
 
-const token = 'token here';
+const token = 'put ze token here and only here, do not put the token at the bottom of the page';
 
 
 
@@ -126,6 +128,10 @@ client.once('ready', () => {
 
 
 client.on('message', async message =>{
+
+  try {
+    
+ 
 
   if(!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -284,6 +290,8 @@ try {
 
 
 if (message.content.startsWith('!tophours')){
+  
+    
   toptenText = []
   puppeteer
   .launch()
@@ -392,9 +400,46 @@ if (message.content.startsWith('!tophours')){
     .setFooter({ text: 'Not for real world use! Bot coded by DY and BY.', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
 	  message.channel.send({ embeds: [toptenEmbed] });
   })
-  .catch(console.error);
+ 
 }
+    
+    if (message.content.startsWith('!testing')) {
+      message.reply('Please enter the maximum distance from airport to airport, in natucal miles, of your flight');
+    
+    
+    const filter = (m) => m.author.id === message.author.id;
+    const collector =  client.channels.cache.get("998980240401502328").createMessageCollector({ filter, time: 5000 });
 
+  collector.on('collect', m => {
+  
+
+   
+
+    var options = { minDistance: 10, maxDistance: debil, includeCountries: ['US'], majorAirportsOnly: true }
+    var flight = flightGenerator(options);
+
+    
+
+    console.log(flight)
+
+    
+
+    
+  });
+
+  collector.on('end', collected => {
+
+    if (`${collected.size}` === '0'){
+      const randEmbed = new MessageEmbed()
+      .setColor('0x5f5e66')
+      .setTitle('**ERROR!**')
+      .setDescription('**Timeout. To restart, resend the command**')
+      .setFooter({ text: 'NOTE: Command only works in the #pets-and-robots channel. Not for real world use! Bot coded by DY and BY', iconURL: 'https://cdn.discordapp.com/icons/612373312051478662/7fad3012e32dd58264ea884473a2552e.webp?size=96' });
+      message.channel.send({ embeds: [randEmbed] });
+    }
+  });
+  
+}
 if (message.content.startsWith('!wheretofly')) {
   message.reply('Please enter the maximum distance for your flight in nautical miles.');
 
@@ -457,6 +502,8 @@ if (`${collected.size}` === '0'){
 }
 if (message.content.startsWith('!traffic')){
   
+    
+ 
 
   const trafvalue = message.content.split(' ')[1];
   
@@ -496,9 +543,13 @@ if (message.content.startsWith('!traffic')){
 });
   
 }
+}
 
-    }
-
+    
+  }
+  catch(err) {
+    console.log(err)
+  }
 });
 
 client.login(token);
